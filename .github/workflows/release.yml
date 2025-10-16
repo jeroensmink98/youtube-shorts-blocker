@@ -2,8 +2,8 @@ name: Create Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 
 jobs:
   build:
@@ -15,9 +15,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get version from tag
+      - name: Get version from manifest
         id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        run: echo "VERSION=$(jq -r '.version' manifest.json)" >> $GITHUB_OUTPUT
 
       - name: Create extension package
         run: |
@@ -82,6 +82,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: v${{ steps.get_version.outputs.VERSION }}
           body_path: release_notes.md
           files: dist/youtube-shorts-blocker-v${{ steps.get_version.outputs.VERSION }}.zip
           draft: false
