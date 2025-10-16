@@ -1,0 +1,90 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create extension package
+        run: |
+          mkdir -p dist
+          zip -r dist/youtube-shorts-blocker-v${{ steps.get_version.outputs.VERSION }}.zip \
+            manifest.json \
+            background.js \
+            content.js \
+            content.css \
+            popup.html \
+            popup.js \
+            rules.json \
+            icons/ \
+            README.md \
+            -x "*.git*"
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          cat > release_notes.md << 'EOF'
+          ## YouTube Shorts Blocker v${{ steps.get_version.outputs.VERSION }}
+
+          ### Installation
+
+          1. Download the `youtube-shorts-blocker-v${{ steps.get_version.outputs.VERSION }}.zip` file below
+          2. Extract the ZIP file to a folder on your computer
+          3. Open Chrome and navigate to `chrome://extensions/`
+          4. Enable "Developer mode" in the top right corner
+          5. Click "Load unpacked"
+          6. Select the extracted folder
+          7. The extension is now installed and active!
+
+          ### Features
+
+          ✅ **Network-level blocking** - Blocks Shorts before they load using Chrome's declarativeNetRequest API
+          ✅ **UI element hiding** - Removes all Shorts-related UI from YouTube
+          ✅ **Automatic redirection** - Shorts pages redirect to YouTube homepage
+          ✅ **User control** - Toggle to enable/disable blocking
+          ✅ **Statistics tracking** - Shows count of blocked Shorts
+          ✅ **Privacy-focused** - No data collection or external connections
+          ✅ **Lightweight** - Minimal performance impact
+
+          ### Browser Compatibility
+
+          - Chrome (88+) ✅
+          - Microsoft Edge (Chromium-based) ✅
+          - Brave Browser ✅
+          - Opera (Chromium-based) ✅
+
+          ### What's Included
+
+          - Network blocking rules (declarativeNetRequest)
+          - Background service worker
+          - Content script for DOM manipulation
+          - CSS hiding rules
+          - User-friendly popup interface
+          - Extension icons
+
+          For detailed documentation, see the [README.md](https://github.com/${{ github.repository }}/blob/main/README.md).
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: release_notes.md
+          files: dist/youtube-shorts-blocker-v${{ steps.get_version.outputs.VERSION }}.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

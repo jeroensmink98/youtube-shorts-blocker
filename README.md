@@ -13,9 +13,20 @@ A Chrome extension that blocks YouTube Shorts videos from appearing in your brow
 
 ## Installation
 
+### Install from Release (Recommended)
+
+1. Go to the [Releases page](https://github.com/jeroensmink98/youtube-shorts-blocker/releases)
+2. Download the latest `youtube-shorts-blocker-v*.zip` file
+3. Extract the ZIP file to a folder on your computer
+4. Open Chrome and navigate to `chrome://extensions/`
+5. Enable "Developer mode" in the top right corner
+6. Click "Load unpacked"
+7. Select the extracted folder
+8. The YouTube Shorts Blocker icon should appear in your extensions toolbar
+
 ### Install from Source
 
-1. Download or clone this repository
+1. Clone this repository or download the source code
 2. Open Chrome and navigate to `chrome://extensions/`
 3. Enable "Developer mode" in the top right corner
 4. Click "Load unpacked"
