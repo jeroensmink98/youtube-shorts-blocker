@@ -1,0 +1,41 @@
+/* Hide YouTube Shorts elements */
+
+/* Hide Shorts shelf on homepage */
+ytd-reel-shelf-renderer {
+  display: none !important;
+}
+
+/* Hide Shorts button in sidebar */
+a[href*="/shorts"][title="Shorts"],
+ytd-guide-entry-renderer:has(a[href*="/shorts"]) {
+  display: none !important;
+}
+
+/* Hide Shorts in mini guide */
+ytd-mini-guide-entry-renderer:has(a[href*="/shorts"]) {
+  display: none !important;
+}
+
+/* Hide Shorts tab on channel pages */
+yt-tab-shape[tab-title*="Shorts"],
+yt-tab-shape[tab-title*="shorts"] {
+  display: none !important;
+}
+
+/* Hide individual Shorts videos */
+ytd-rich-item-renderer:has(a[href*="/shorts/"]),
+ytd-grid-video-renderer:has(a[href*="/shorts/"]),
+ytd-video-renderer:has(a[href*="/shorts/"]) {
+  display: none !important;
+}
+
+/* Hide Shorts section in search results */
+ytd-reel-shelf-renderer,
+ytd-shorts-lockup-view-model {
+  display: none !important;
+}
+
+/* Hide vertical video player (Shorts player) */
+ytd-reel-video-renderer {
+  display: none !important;
+}
