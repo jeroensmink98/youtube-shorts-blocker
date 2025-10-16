@@ -4,7 +4,7 @@ This document describes how to create a new release of the YouTube Shorts Blocke
 
 ## Automated Release via GitHub Actions
 
-The repository includes a GitHub Actions workflow that automatically creates releases when you push a new tag.
+The repository includes a GitHub Actions workflow that automatically creates releases when you merge changes to the main branch.
 
 ### Creating a New Release
 
@@ -14,24 +14,18 @@ The repository includes a GitHub Actions workflow that automatically creates rel
    # For example, change "1.0.0" to "1.1.0"
    ```
 
-2. **Commit the version change**
+2. **Commit and push the version change to main**
    ```bash
    git add manifest.json
    git commit -m "Bump version to 1.1.0"
-   git push
+   git push origin main
    ```
 
-3. **Create and push a version tag**
-   ```bash
-   # Create a tag matching the version (must start with 'v')
-   git tag v1.1.0
-   git push origin v1.1.0
-   ```
-
-4. **Automatic release creation**
-   - The GitHub Actions workflow will automatically trigger
+3. **Automatic release creation**
+   - The GitHub Actions workflow will automatically trigger on push to main
    - It will package the extension into a ZIP file
    - It will create a GitHub Release with:
+     - A tag matching the version in manifest.json (e.g., v1.1.0)
      - Release notes
      - Installation instructions
      - The packaged extension ZIP file
@@ -68,12 +62,12 @@ Examples:
 ## Workflow Details
 
 The GitHub Actions workflow (`.github/workflows/release.yml`):
-1. Triggers on tag push matching `v*` pattern
+1. Triggers on push to the main branch
 2. Checks out the code
-3. Extracts version from the tag
+3. Extracts version from manifest.json
 4. Creates a ZIP file with the extension files
 5. Generates release notes
-6. Creates a GitHub Release with the ZIP file
+6. Creates a GitHub Release with a tag based on the version (e.g., v1.0.0)
 
 ## Manual Release (Alternative)
 
@@ -110,7 +104,7 @@ Before creating a release:
 - [ ] Update `README.md` if needed
 - [ ] Update `CHANGELOG.md` if it exists
 - [ ] Commit all changes
-- [ ] Create and push version tag
+- [ ] Push changes to main branch
 - [ ] Verify the GitHub Actions workflow completes successfully
 - [ ] Check the release page for the published release
 - [ ] Test downloading and installing from the release
@@ -118,8 +112,8 @@ Before creating a release:
 ## Troubleshooting
 
 ### Workflow doesn't trigger
-- Ensure the tag starts with `v` (e.g., `v1.0.0`, not `1.0.0`)
-- Check that the tag was pushed to the repository: `git push origin v1.0.0`
+- Ensure changes are pushed to the main branch
+- Check that the workflow file is in `.github/workflows/` directory
 - Verify GitHub Actions are enabled in repository settings
 
 ### Release creation fails
@@ -138,17 +132,13 @@ Before creating a release:
 # 1. Update version in manifest.json
 sed -i 's/"version": "1.0.0"/"version": "1.1.0"/' manifest.json
 
-# 2. Commit the change
+# 2. Commit and push the change to main
 git add manifest.json
 git commit -m "Bump version to 1.1.0"
-git push
+git push origin main
 
-# 3. Create and push tag
-git tag v1.1.0
-git push origin v1.1.0
-
-# 4. Wait for GitHub Actions to complete
-# 5. Check the releases page
+# 3. Wait for GitHub Actions to complete
+# 4. Check the releases page
 ```
 
 The release will be available at:
